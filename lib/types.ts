@@ -5,6 +5,7 @@ export type NewsTag = 'Notice'|'Event'|'Update'|'Pinned'
 export type SkillOfferer = {
   id: string
   display_name: string
+  email?: string
   quadrant: Quadrant
   cross_streets?: string
   skill_categories: string[]
@@ -55,7 +56,32 @@ export type Admin = {
 
 export type MessageThread = {
   id: string
-  offerer_id?: string
+  offerer_id: string
+  seeker_id?: string
+  seeker_name?: string
+  created_at: string
+  skill_offerer?: SkillOfferer
+  last_message?: Message
+  last_message_body?: string
+  last_message_at?: string
+  unread_count?: number
+  my_role?: 'seeker' | 'offerer'
+  other_party_name?: string
+}
+
+export type Message = {
+  id: string
+  thread_id: string
+  sender_role: 'seeker' | 'offerer'
+  body: string
+  sent_at: string
+  read_at?: string
+}
+
+export type User = {
+  id: string
+  name: string
+  email: string
   created_at: string
 }
 

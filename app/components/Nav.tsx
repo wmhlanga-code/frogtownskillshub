@@ -1,21 +1,66 @@
-'use client'
-
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { createClient as createServerSupabaseClient } from '@/lib/supabase/server'
+import { createServiceRoleClient } from '@/lib/admin'
+import NavLinksClient from './NavLinksClient'
+import NavAuthClient from './NavAuthClient'
+import MobileNav from './MobileNav'
 
-const LINKS = [
-  { href: '/', label: 'Directory' },
-  { href: '/offer', label: 'Offer Skills' },
-  { href: '/about', label: 'About' },
-]
+export default async function Nav() {
+  const supabase = createServerSupabaseClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
 
-export default function Nav() {
-  const pathname = usePathname()
+  let name: string | undefined
+  let unreadCount = 0
+
+  if (user?.email) {
+    const service = createServiceRoleClient()
+
+    const [userResult, myOffererRows] = await Promise.all([
+      service.from('users').select('name').eq('email', user.email).maybeSingle(),
+      service.from('skill_offerers').select('id').eq('email', user.email),
+    ])
+
+    name = userResult.data?.name
+    const myOffererIds = (myOffererRows.data ?? []).map((o) => o.id)
+
+    const [seekerThreadsResult, offererThreadsResult] = await Promise.all([
+      service.from('message_threads').select('id').eq('seeker_id', user.id),
+      myOffererIds.length > 0
+        ? service.from('message_threads').select('id').in('offerer_id', myOffererIds)
+        : Promise.resolve({ data: [] as { id: string }[] }),
+    ])
+
+    const seekerThreadIds = (seekerThreadsResult.data ?? []).map((t) => t.id)
+    const offererThreadIds = (offererThreadsResult.data ?? []).map((t) => t.id)
+
+    const [seekerUnread, offererUnread] = await Promise.all([
+      seekerThreadIds.length > 0
+        ? service
+            .from('messages')
+            .select('*', { count: 'exact', head: true })
+            .in('thread_id', seekerThreadIds)
+            .is('read_at', null)
+            .neq('sender_role', 'seeker')
+        : Promise.resolve({ count: 0 }),
+      offererThreadIds.length > 0
+        ? service
+            .from('messages')
+            .select('*', { count: 'exact', head: true })
+            .in('thread_id', offererThreadIds)
+            .is('read_at', null)
+            .neq('sender_role', 'offerer')
+        : Promise.resolve({ count: 0 }),
+    ])
+
+    unreadCount = (seekerUnread.count ?? 0) + (offererUnread.count ?? 0)
+  }
 
   return (
-    <nav className="bg-frogtown-900 text-white h-14 sticky top-0 z-50 flex items-center justify-between px-4 border-b border-frogtown-800 shadow-sm">
-      <Link href="/" className="flex items-center gap-2">
-        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-frogtown-400/20 text-frogtown-400">
+    <nav className="relative bg-frogtown-900 text-white h-14 sticky top-0 z-50 flex items-center justify-between px-4 border-b border-frogtown-800 shadow-sm">
+      <Link href="/" className="flex items-center gap-2 min-w-0">
+        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-frogtown-400/20 text-frogtown-400 flex-shrink-0">
           <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">
             <path
               d="M12 3c-3 2-5 5-5 8.5a5 5 0 0 0 10 0C17 8 15 5 12 3Z"
@@ -31,27 +76,14 @@ export default function Nav() {
             />
           </svg>
         </span>
-        <span className="text-lg font-bold tracking-tight leading-none">
+        <span className="text-lg font-bold tracking-tight leading-none truncate">
           Frogtown <span className="text-frogtown-400">Skills</span>
         </span>
       </Link>
       <div className="flex items-center gap-1">
-        {LINKS.map((link) => {
-          const isActive = pathname === link.href
-          return (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`text-sm font-medium px-4 py-2 rounded-full transition-colors duration-150 ${
-                isActive
-                  ? 'bg-frogtown-700 text-white shadow-sm'
-                  : 'text-frogtown-200/80 hover:text-white hover:bg-white/10'
-              }`}
-            >
-              {link.label}
-            </Link>
-          )
-        })}
+        <NavLinksClient />
+        <NavAuthClient signedIn={!!user} name={name} email={user?.email} unreadCount={unreadCount} />
+        <MobileNav signedIn={!!user} name={name} email={user?.email} unreadCount={unreadCount} />
       </div>
     </nav>
   )
