@@ -26,6 +26,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
     .eq('id', params.id)
 
   if (updateError) {
+    console.error('Failed to update listing:', updateError)
     return Response.json({ error: 'Failed to update listing' }, { status: 500 })
   }
 

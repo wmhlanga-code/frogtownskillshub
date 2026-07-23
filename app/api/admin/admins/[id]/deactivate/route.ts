@@ -42,6 +42,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
     .eq('id', params.id)
 
   if (updateError) {
+    console.error('Failed to deactivate admin:', updateError)
     return Response.json({ error: 'Failed to deactivate admin' }, { status: 500 })
   }
 

@@ -30,11 +30,12 @@ export async function POST(request: Request) {
 
   const { data: inserted, error: insertError } = await service
     .from('admins')
-    .insert({ name, email, role, active: true })
+    .insert({ name, email, role, active: true, created_by: admin.id })
     .select('id')
     .single()
 
   if (insertError) {
+    console.error('Failed to create admin record:', insertError)
     return Response.json({ error: 'Failed to create admin record' }, { status: 500 })
   }
 

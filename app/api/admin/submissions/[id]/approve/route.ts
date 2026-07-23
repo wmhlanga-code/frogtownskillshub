@@ -19,7 +19,9 @@ export async function POST(request: Request, { params }: { params: { id: string 
   }
 
   const { error: insertError } = await service.from('skill_offerers').insert({
+    submission_id: submission.id,
     display_name: submission.display_name,
+    email: submission.email,
     quadrant: submission.quadrant,
     cross_streets: submission.cross_streets,
     skill_categories: submission.skill_categories,
@@ -27,10 +29,12 @@ export async function POST(request: Request, { params }: { params: { id: string 
     bio: submission.bio,
     languages: submission.languages,
     active: true,
+    approved_by: admin.id,
     approved_at: new Date().toISOString(),
   })
 
   if (insertError) {
+    console.error('Failed to approve submission:', insertError)
     return Response.json({ error: 'Failed to approve submission' }, { status: 500 })
   }
 

@@ -22,6 +22,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
     .eq('id', params.id)
 
   if (error) {
+    console.error('Failed to reject submission:', error)
     return Response.json({ error: 'Failed to reject submission' }, { status: 500 })
   }
 

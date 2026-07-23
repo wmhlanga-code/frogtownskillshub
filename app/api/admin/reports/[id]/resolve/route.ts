@@ -14,6 +14,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
     .eq('id', params.id)
 
   if (error) {
+    console.error('Failed to resolve report:', error)
     return Response.json({ error: 'Failed to resolve report' }, { status: 500 })
   }
 

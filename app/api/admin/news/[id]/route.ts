@@ -30,6 +30,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     .eq('id', params.id)
 
   if (error) {
+    console.error('Failed to update post:', error)
     return Response.json({ error: 'Failed to update post' }, { status: 500 })
   }
 
@@ -47,6 +48,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
   const { error } = await service.from('news_posts').delete().eq('id', params.id)
 
   if (error) {
+    console.error('Failed to delete post:', error)
     return Response.json({ error: 'Failed to delete post' }, { status: 500 })
   }
 
