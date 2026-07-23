@@ -42,11 +42,13 @@ export default function AboutPage() {
       <Nav />
 
       <section className="bg-frogtown-900 text-white px-4 py-10">
-        <h1 className="text-2xl font-bold">About Frogtown Skills</h1>
-        <p className="text-frogtown-200 mt-2">
-          A neighborhood-built directory connecting Frogtown residents with each other through
-          skills, tools, and trust.
-        </p>
+        <div className="max-w-2xl mx-auto">
+          <h1 className="text-2xl sm:text-3xl font-bold">About Frogtown Skills</h1>
+          <p className="text-frogtown-200 mt-2">
+            A neighborhood-built directory connecting Frogtown residents with each other through
+            skills, tools, and trust.
+          </p>
+        </div>
       </section>
 
       <main className="max-w-2xl mx-auto px-5 py-8 flex flex-col gap-10">

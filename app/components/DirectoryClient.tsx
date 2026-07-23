@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import type { Quadrant, SkillOfferer } from '@/lib/types'
 import { QUADRANT_GRID, QUADRANT_COMPASS } from '@/lib/quadrants'
 import NeighborhoodMap from './NeighborhoodMap'
@@ -9,10 +10,41 @@ import NeighborhoodMap from './NeighborhoodMap'
 const CATEGORIES = ['Practical', 'Knowledge', 'Care', 'Emergency', 'Social']
 
 export default function DirectoryClient({ offerers }: { offerers: SkillOfferer[] }) {
+  const router = useRouter()
   const [search, setSearch] = useState('')
   const [category, setCategory] = useState<string | null>(null)
   const [quadrant, setQuadrant] = useState<Quadrant | null>(null)
   const [mapOpen, setMapOpen] = useState(false)
+  const [messagingId, setMessagingId] = useState<string | null>(null)
+
+  async function handleMessage(offererId: string) {
+    setMessagingId(offererId)
+    try {
+      const { createClient } = await import('@/lib/supabase/client')
+      const supabase = createClient()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+
+      if (!user) {
+        router.push('/login?redirect=/messages')
+        return
+      }
+
+      const res = await fetch('/api/threads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ offerer_id: offererId }),
+      })
+
+      if (res.ok) {
+        const data = await res.json()
+        router.push(`/messages/${data.thread_id}`)
+      }
+    } finally {
+      setMessagingId(null)
+    }
+  }
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase()
@@ -152,12 +184,15 @@ export default function DirectoryClient({ offerers }: { offerers: SkillOfferer[]
                 <span>Languages: {offerer.languages.join(', ')}</span>
                 {offerer.cross_streets && <span>Near {offerer.cross_streets}</span>}
               </div>
-              <Link
-                href={`/messages/${offerer.id}`}
-                className="block text-center w-full bg-black text-white mt-3 py-2 rounded"
+              <button
+                onClick={() => handleMessage(offerer.id)}
+                disabled={messagingId === offerer.id}
+                className="block text-center w-full bg-black text-white mt-3 py-2 rounded disabled:opacity-60"
               >
-                Message {offerer.display_name.split(' ')[0]}
-              </Link>
+                {messagingId === offerer.id
+                  ? 'Starting...'
+                  : `Message ${offerer.display_name.split(' ')[0]}`}
+              </button>
             </div>
           ))}
         </div>

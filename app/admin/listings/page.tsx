@@ -13,7 +13,7 @@ export default async function ListingsPage() {
   const offerers = (data ?? []) as SkillOfferer[]
 
   return (
-    <div className="p-7">
+    <div className="p-4 sm:p-7">
       <h1 className="text-xl font-extrabold text-frogtown-900 mb-1">All listings</h1>
       <p className="text-sm text-muted-green mb-6">{offerers.length} total</p>
 

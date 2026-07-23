@@ -3,10 +3,11 @@ import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl
   const requestHeaders = new Headers(request.headers)
-  requestHeaders.set('x-pathname', request.nextUrl.pathname)
+  requestHeaders.set('x-pathname', pathname)
 
-  if (request.nextUrl.pathname === '/admin/login') {
+  if (pathname === '/admin/login') {
     return NextResponse.next({ request: { headers: requestHeaders } })
   }
 
@@ -34,6 +35,15 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
+  if (pathname.startsWith('/messages')) {
+    if (!user?.email) {
+      const loginUrl = new URL('/login', request.url)
+      loginUrl.searchParams.set('redirect', pathname)
+      return NextResponse.redirect(loginUrl)
+    }
+    return response
+  }
+
   if (!user?.email) {
     return NextResponse.redirect(new URL('/admin/login', request.url))
   }
@@ -58,5 +68,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*'],
+  matcher: ['/admin/:path*', '/messages/:path*'],
 }

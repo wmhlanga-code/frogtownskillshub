@@ -7,7 +7,7 @@ export default async function AdminsPage() {
 
   if (currentAdmin?.role !== 'super_admin') {
     return (
-      <div className="p-7">
+      <div className="p-4 sm:p-7">
         <h1 className="text-xl font-extrabold text-frogtown-900 mb-1">Admin accounts</h1>
         <p className="text-sm text-muted-green">
           You do not have permission to view this page.
@@ -21,7 +21,7 @@ export default async function AdminsPage() {
   const admins = (data ?? []) as Admin[]
 
   return (
-    <div className="p-7">
+    <div className="p-4 sm:p-7">
       <h1 className="text-xl font-extrabold text-frogtown-900 mb-6">Admin accounts</h1>
       <AdminsClient admins={admins} currentAdminId={currentAdmin.id} isSuperAdmin />
     </div>

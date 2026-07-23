@@ -31,13 +31,16 @@ export default async function HomePage() {
       <Nav />
 
       <section className="bg-frogtown-800 text-white px-4 py-10">
-        <h1 className="text-2xl font-bold">Find a neighbor with the skills you need.</h1>
-        <p className="text-frogtown-200 mt-2">Trusted, local, Frogtown.</p>
+        <div className="max-w-3xl mx-auto">
+          <h1 className="text-2xl sm:text-3xl font-bold">Find a neighbor with the skills you need.</h1>
+          <p className="text-frogtown-200 mt-2">Trusted, local, Frogtown.</p>
+        </div>
       </section>
 
-      <NewsStrip posts={newsPosts} />
-
-      <DirectoryClient offerers={offerers} />
+      <div className="max-w-3xl mx-auto">
+        <NewsStrip posts={newsPosts} />
+        <DirectoryClient offerers={offerers} />
+      </div>
 
       <Link
         href="/offer"

@@ -14,7 +14,7 @@ export default async function AdminNewsPage() {
   const posts = (data ?? []) as NewsPost[]
 
   return (
-    <div className="p-7">
+    <div className="p-4 sm:p-7">
       <h1 className="text-xl font-extrabold text-frogtown-900 mb-6">News and Updates</h1>
       <NewsManager posts={posts} />
     </div>
