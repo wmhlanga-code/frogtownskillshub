@@ -58,9 +58,9 @@ export default async function Nav() {
   }
 
   return (
-    <nav className="relative bg-frogtown-900 text-white h-14 sticky top-0 z-50 flex items-center justify-between px-4 border-b border-frogtown-800 shadow-sm">
-      <Link href="/" className="flex items-center gap-2 min-w-0">
-        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-frogtown-400/20 text-frogtown-400 flex-shrink-0">
+    <nav className="relative bg-gradient-to-r from-frogtown-900 to-frogtown-800 text-white h-14 sticky top-0 z-50 flex items-center justify-between px-4 border-b border-frogtown-800/80 shadow-md">
+      <Link href="/" className="group flex items-center gap-2 min-w-0">
+        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-frogtown-400/30 to-frogtown-400/10 text-frogtown-400 flex-shrink-0 shadow-sm transition-transform duration-150 group-hover:scale-105">
           <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">
             <path
               d="M12 3c-3 2-5 5-5 8.5a5 5 0 0 0 10 0C17 8 15 5 12 3Z"

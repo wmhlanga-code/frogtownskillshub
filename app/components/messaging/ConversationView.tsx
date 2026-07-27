@@ -128,12 +128,12 @@ export default function ConversationView({
   }
 
   return (
-    <div className="flex flex-col flex-1 bg-frogtown-50">
-      <div className="bg-white px-3 sm:px-5 py-3 border-b border-frogtown-200 flex items-center gap-3">
+    <div className="flex flex-col flex-1 bg-gradient-to-b from-frogtown-50 to-off-white">
+      <div className="bg-white/90 backdrop-blur-sm px-3 sm:px-5 py-3 border-b border-frogtown-100 shadow-sm flex items-center gap-3 z-10">
         <Link
           href="/messages"
           aria-label="Back to messages"
-          className="md:hidden flex h-8 w-8 items-center justify-center rounded-full text-frogtown-700 hover:bg-frogtown-50 flex-shrink-0 -ml-1"
+          className="md:hidden flex h-8 w-8 items-center justify-center rounded-full text-frogtown-700 hover:bg-frogtown-50 transition-colors flex-shrink-0 -ml-1"
         >
           <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">
             <path
@@ -145,7 +145,7 @@ export default function ConversationView({
             />
           </svg>
         </Link>
-        <div className="w-9 h-9 bg-frogtown-800 rounded-full flex items-center justify-center font-bold text-white text-sm flex-shrink-0">
+        <div className="w-9 h-9 rounded-full bg-gradient-to-br from-frogtown-600 to-frogtown-800 flex items-center justify-center font-bold text-white text-sm flex-shrink-0 shadow-sm">
           {initials(otherName)}
         </div>
         <div className="min-w-0">
@@ -169,7 +169,7 @@ export default function ConversationView({
         </div>
         <button
           onClick={() => setReportOpen(true)}
-          className="ml-auto bg-white border border-frogtown-200 rounded-md px-3 py-1.5 text-xs text-muted-green hover:border-black hover:text-black flex-shrink-0"
+          className="ml-auto bg-white border border-frogtown-200 rounded-full px-3 py-1.5 text-xs text-muted-green transition-colors hover:border-red-300 hover:text-red-600 flex-shrink-0"
         >
           Report
         </button>
@@ -178,7 +178,7 @@ export default function ConversationView({
       <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-3">
         {messages.length === 0 && (
           <div className="flex-1 flex flex-col items-center justify-center text-center gap-1">
-            <div className="w-12 h-12 bg-frogtown-800 rounded-full flex items-center justify-center font-bold text-white text-sm mb-2">
+            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-frogtown-600 to-frogtown-800 flex items-center justify-center font-bold text-white text-base mb-2 shadow-sm">
               {initials(otherName)}
             </div>
             <p className="text-sm font-semibold text-frogtown-900">{otherName}</p>
@@ -190,12 +190,15 @@ export default function ConversationView({
         {messages.map((message) => {
           const mine = message.sender_role === currentUserRole
           return (
-            <div key={message.id} className={`flex flex-col ${mine ? 'items-end' : 'items-start'}`}>
+            <div
+              key={message.id}
+              className={`animate-message-in flex flex-col ${mine ? 'items-end' : 'items-start'}`}
+            >
               <div
-                className={`max-w-[72%] px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed ${
+                className={`max-w-[72%] px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed shadow-sm ${
                   mine
-                    ? 'bg-frogtown-800 text-white rounded-br-sm'
-                    : 'bg-white border border-frogtown-200 text-black rounded-bl-sm'
+                    ? 'bg-gradient-to-br from-frogtown-700 to-frogtown-900 text-white rounded-br-sm'
+                    : 'bg-white border border-frogtown-100 text-black rounded-bl-sm'
                 }`}
               >
                 {message.body}
@@ -207,7 +210,7 @@ export default function ConversationView({
         <div ref={bottomRef} />
       </div>
 
-      <div className="bg-white border-t border-frogtown-200 px-4 py-3 flex gap-3 items-end">
+      <div className="bg-white border-t border-frogtown-100 px-4 py-3 flex gap-3 items-end">
         <textarea
           ref={textareaRef}
           value={draft}
@@ -215,14 +218,23 @@ export default function ConversationView({
           onKeyDown={handleKeyDown}
           placeholder={`Message ${otherFirstName}...`}
           rows={1}
-          className="flex-1 px-3.5 py-2.5 border-[1.5px] border-frogtown-200 rounded-2xl text-sm font-sans resize-none min-h-[40px] max-h-[120px] focus:border-frogtown-600 focus:outline-none text-frogtown-900"
+          className="flex-1 px-3.5 py-2.5 border-[1.5px] border-frogtown-200 rounded-2xl text-sm font-sans resize-none min-h-[40px] max-h-[120px] transition-colors focus:border-frogtown-600 focus:outline-none focus:ring-2 focus:ring-frogtown-100 text-frogtown-900"
         />
         <button
           onClick={handleSend}
           disabled={!draft.trim() || sending}
-          className="bg-frogtown-800 text-white rounded-2xl px-4 py-2.5 text-sm font-semibold disabled:opacity-40"
+          aria-label="Send message"
+          className="flex items-center justify-center h-10 w-10 rounded-full bg-gradient-to-br from-frogtown-700 to-frogtown-900 text-white shadow-sm transition-all hover:shadow-md active:scale-95 disabled:opacity-40 disabled:hover:shadow-sm disabled:active:scale-100 flex-shrink-0"
         >
-          Send
+          <svg viewBox="0 0 24 24" fill="none" className="h-[18px] w-[18px] -translate-x-px">
+            <path
+              d="M4 12 20 4l-6 16-2.5-6.5L4 12Z"
+              stroke="currentColor"
+              strokeWidth="1.7"
+              strokeLinejoin="round"
+              strokeLinecap="round"
+            />
+          </svg>
         </button>
       </div>
 

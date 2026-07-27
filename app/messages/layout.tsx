@@ -82,13 +82,15 @@ export default async function MessagesLayout({ children }: { children: React.Rea
   const hasThread = !!currentThreadId
 
   return (
-    <div className="min-h-screen bg-off-white">
+    <div className="min-h-screen bg-gradient-to-br from-frogtown-50 via-off-white to-frogtown-100">
       <Nav />
-      <div className="flex flex-row h-[calc(100vh-56px)]">
-        <div className={`${hasThread ? 'hidden' : 'flex'} md:flex flex-shrink-0`}>
-          <ThreadList initialThreads={threads} currentThreadId={currentThreadId} />
+      <div className="md:max-w-6xl md:mx-auto md:p-5">
+        <div className="flex flex-row h-[calc(100vh-56px)] md:h-[calc(100vh-88px)] bg-white md:rounded-2xl md:shadow-xl md:border md:border-frogtown-100 overflow-hidden">
+          <div className={`${hasThread ? 'hidden' : 'flex'} md:flex flex-shrink-0`}>
+            <ThreadList initialThreads={threads} currentThreadId={currentThreadId} />
+          </div>
+          <div className={`${hasThread ? 'flex' : 'hidden'} md:flex flex-1 min-w-0`}>{children}</div>
         </div>
-        <div className={`${hasThread ? 'flex' : 'hidden'} md:flex flex-1 min-w-0`}>{children}</div>
       </div>
     </div>
   )

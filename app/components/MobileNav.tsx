@@ -7,7 +7,7 @@ import { usePathname, useRouter } from 'next/navigation'
 const LINKS = [
   { href: '/', label: 'Directory' },
   { href: '/offer', label: 'Offer Skills' },
-  { href: '/about', label: 'About' },
+  { href: '/#about', label: 'About' },
 ]
 
 export default function MobileNav({
@@ -55,9 +55,9 @@ export default function MobileNav({
         <Link
           href="/messages"
           aria-label="Messages"
-          className={`relative flex h-9 w-9 items-center justify-center rounded-full transition-colors duration-150 ${
+          className={`relative flex h-9 w-9 items-center justify-center rounded-full transition-all duration-150 ${
             pathname.startsWith('/messages')
-              ? 'bg-frogtown-700 text-white'
+              ? 'bg-gradient-to-br from-frogtown-700 to-frogtown-600 text-white shadow-sm'
               : 'text-frogtown-200/80 hover:text-white hover:bg-white/10'
           }`}
         >
@@ -103,13 +103,15 @@ export default function MobileNav({
       </button>
 
       {open && (
-        <div className="absolute left-0 right-0 top-14 bg-frogtown-900 border-t border-frogtown-800 shadow-lg py-2 flex flex-col z-50">
+        <div className="animate-message-in absolute left-0 right-0 top-14 bg-gradient-to-b from-frogtown-900 to-frogtown-800 border-t border-frogtown-800 shadow-lg py-2 flex flex-col z-50">
           {LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className={`px-5 py-3 text-sm font-medium ${
-                pathname === link.href ? 'bg-frogtown-800 text-white' : 'text-frogtown-200/80'
+              className={`mx-2 my-0.5 px-4 py-3 text-sm font-medium rounded-xl transition-colors duration-150 ${
+                pathname === link.href
+                  ? 'bg-gradient-to-r from-frogtown-700 to-frogtown-600 text-white shadow-sm'
+                  : 'text-frogtown-200/80 hover:bg-white/10 hover:text-white'
               }`}
             >
               {link.label}
@@ -125,19 +127,22 @@ export default function MobileNav({
                 </div>
                 <button
                   onClick={handleSignOut}
-                  className="block w-full text-left px-5 py-3 text-sm text-red-300"
+                  className="mx-2 block w-[calc(100%-1rem)] text-left px-4 py-3 text-sm text-red-300 rounded-xl transition-colors hover:bg-white/10"
                 >
                   Sign out
                 </button>
               </>
             ) : (
               <div className="flex flex-col gap-2 px-5 py-2">
-                <Link href="/login" className="text-sm font-medium text-frogtown-200/80">
+                <Link
+                  href="/login"
+                  className="text-sm font-medium text-frogtown-200/80 hover:text-white transition-colors"
+                >
                   Sign in
                 </Link>
                 <Link
                   href="/signup"
-                  className="text-sm font-semibold text-center px-4 py-2 rounded-full bg-frogtown-400 text-frogtown-900"
+                  className="text-sm font-semibold text-center px-4 py-2.5 rounded-full bg-gradient-to-r from-frogtown-400 to-frogtown-200 text-frogtown-900 shadow-sm transition-transform active:scale-[0.98]"
                 >
                   Create account
                 </Link>
