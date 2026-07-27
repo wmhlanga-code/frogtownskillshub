@@ -81,7 +81,7 @@ export default function AdminsClient({
     <div>
       <form
         onSubmit={handleInvite}
-        className="bg-white border border-frogtown-200 rounded-lg p-4 mb-6"
+        className="bg-white border border-frogtown-200 rounded-xl shadow-sm p-4 mb-6"
       >
         <h2 className="text-sm font-bold text-frogtown-900 mb-3">Invite a new admin</h2>
 
@@ -91,19 +91,19 @@ export default function AdminsClient({
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Name"
-            className="flex-1 border border-frogtown-200 rounded-lg px-3 py-2 text-sm text-frogtown-900"
+            className="flex-1 border border-frogtown-200 rounded-lg px-3 py-2 text-sm text-frogtown-900 transition-colors focus:outline-none focus:border-frogtown-600 focus:ring-2 focus:ring-frogtown-100"
           />
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Email"
-            className="flex-1 border border-frogtown-200 rounded-lg px-3 py-2 text-sm text-frogtown-900"
+            className="flex-1 border border-frogtown-200 rounded-lg px-3 py-2 text-sm text-frogtown-900 transition-colors focus:outline-none focus:border-frogtown-600 focus:ring-2 focus:ring-frogtown-100"
           />
           <select
             value={role}
             onChange={(e) => setRole(e.target.value as 'admin' | 'super_admin')}
-            className="border border-frogtown-200 rounded-lg px-3 py-2 text-sm text-frogtown-900"
+            className="border border-frogtown-200 rounded-lg px-3 py-2 text-sm text-frogtown-900 transition-colors focus:outline-none focus:border-frogtown-600 focus:ring-2 focus:ring-frogtown-100"
           >
             <option value="admin">Admin</option>
             <option value="super_admin">Super admin</option>
@@ -116,13 +116,13 @@ export default function AdminsClient({
         <button
           type="submit"
           disabled={sending}
-          className="bg-frogtown-800 text-white text-sm font-bold px-4 py-2 rounded-lg disabled:opacity-60"
+          className="bg-frogtown-800 text-white text-sm font-bold px-4 py-2 rounded-lg transition-all hover:bg-frogtown-700 active:scale-[0.99] disabled:opacity-60 disabled:hover:bg-frogtown-800 disabled:active:scale-100"
         >
           {sending ? 'Sending...' : 'Send invitation'}
         </button>
       </form>
 
-      <div className="bg-white border border-frogtown-200 rounded-lg overflow-x-auto">
+      <div className="bg-white border border-frogtown-200 rounded-xl shadow-sm overflow-x-auto">
         <table className="w-full text-left">
           <thead>
             <tr className="text-xs font-bold uppercase tracking-wide text-muted-green border-b border-frogtown-200">
@@ -142,7 +142,10 @@ export default function AdminsClient({
               const canDeactivate = isSuperAdmin && !isSelf && admin.active && !isLastSuperAdmin
 
               return (
-                <tr key={admin.id} className="text-sm border-b border-frogtown-100">
+                <tr
+                  key={admin.id}
+                  className="text-sm border-b border-frogtown-100 last:border-b-0 transition-colors hover:bg-frogtown-50/60"
+                >
                   <td className="px-3 py-3 text-frogtown-900">{admin.name}</td>
                   <td className="px-3 py-3 text-frogtown-900">{admin.email}</td>
                   <td className="px-3 py-3">
@@ -177,7 +180,7 @@ export default function AdminsClient({
                       <button
                         onClick={() => handleDeactivate(admin)}
                         disabled={!canDeactivate || busyId === admin.id}
-                        className="text-xs text-black font-semibold disabled:opacity-40 disabled:cursor-not-allowed"
+                        className="text-xs text-black font-semibold transition-colors hover:text-red-600 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:text-black"
                         title={
                           isSelf
                             ? 'Cannot deactivate yourself'

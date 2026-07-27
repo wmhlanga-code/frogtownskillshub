@@ -55,8 +55,14 @@ export default function LoginForm({ redirectTo }: { redirectTo: string }) {
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
           required
-          className="w-full border border-frogtown-200 rounded-lg px-3 py-2.5 text-sm mb-4 text-frogtown-900 focus:outline-none focus:border-frogtown-600"
+          className="w-full border border-frogtown-200 rounded-lg px-3 py-2.5 text-sm mb-2 text-frogtown-900 focus:outline-none focus:border-frogtown-600"
         />
+        <Link
+          href={`/forgot-password?next=${encodeURIComponent(redirectTo)}`}
+          className="block text-xs text-frogtown-700 font-semibold mb-4"
+        >
+          Forgot password?
+        </Link>
 
         {error && <p className="text-sm text-red-600 mb-3">{error}</p>}
 

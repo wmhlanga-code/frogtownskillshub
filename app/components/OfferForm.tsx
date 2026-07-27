@@ -3,16 +3,11 @@
 import { useState } from 'react'
 import type { Quadrant } from '@/lib/types'
 import { QUADRANT_GRID, QUADRANT_COMPASS } from '@/lib/quadrants'
+import { LANGUAGES, SKILL_CATEGORIES } from '@/lib/constants'
 import NeighborhoodMap from './NeighborhoodMap'
+import SkillsPicklist from './SkillsPicklist'
+import CrossStreetSelect from './CrossStreetSelect'
 
-const LANGUAGES = ['English', 'Spanish', 'Hmong', 'Somali', 'Other']
-const SKILL_CATEGORIES = [
-  { value: 'Practical', label: 'Practical / Hands-On' },
-  { value: 'Knowledge', label: 'Professional / Knowledge' },
-  { value: 'Care', label: 'Care and Community' },
-  { value: 'Emergency', label: 'Emergency / Resilience' },
-  { value: 'Social', label: 'Social and Cultural' },
-]
 const BIO_MAX = 200
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
@@ -31,6 +26,7 @@ export default function OfferForm() {
   const [quadrant, setQuadrant] = useState<Quadrant | null>(null)
   const [crossStreets, setCrossStreets] = useState('')
   const [skillCategories, setSkillCategories] = useState<string[]>([])
+  const [skills, setSkills] = useState<string[]>([])
   const [bio, setBio] = useState('')
   const [consentReview, setConsentReview] = useState(false)
   const [consentPublic, setConsentPublic] = useState(false)
@@ -77,6 +73,7 @@ export default function OfferForm() {
           quadrant,
           cross_streets: crossStreets || undefined,
           skill_categories: skillCategories,
+          skills: skills.length > 0 ? skills : undefined,
           bio: bio || undefined,
           consent_review: consentReview,
           consent_public: consentPublic,
@@ -93,19 +90,37 @@ export default function OfferForm() {
 
   if (submitted) {
     return (
-      <div className="max-w-2xl mx-auto px-5 py-12 text-center">
-        <p className="text-frogtown-800 font-semibold">
-          Your submission has been received. A community admin will review it shortly.
-        </p>
+      <div className="max-w-2xl mx-auto px-5 py-16 text-center">
+        <div className="bg-white rounded-xl border border-frogtown-200 shadow-sm p-8 flex flex-col items-center">
+          <div className="h-12 w-12 rounded-full bg-frogtown-50 border border-frogtown-200 flex items-center justify-center mb-4">
+            <svg viewBox="0 0 24 24" fill="none" className="h-6 w-6 text-frogtown-700">
+              <path
+                d="m5 13 4 4L19 7"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
+          <p className="text-frogtown-900 font-bold">Submission received</p>
+          <p className="text-sm text-muted-green mt-2 max-w-sm">
+            A community admin will review it shortly. You&rsquo;ll be notified by email once it&rsquo;s
+            approved.
+          </p>
+        </div>
       </div>
     )
   }
 
   const bioRemaining = BIO_MAX - bio.length
 
+  const inputClasses =
+    'w-full border border-frogtown-200 rounded-lg px-3 py-2 text-sm mt-1 text-frogtown-900 placeholder:text-muted-green/60 transition-colors focus:outline-none focus:border-frogtown-600 focus:ring-2 focus:ring-frogtown-100'
+
   return (
-    <form onSubmit={handleSubmit} className="max-w-2xl mx-auto px-5 py-8 flex flex-col gap-8">
-      <div>
+    <form onSubmit={handleSubmit} className="max-w-2xl mx-auto px-5 py-8 sm:py-10 flex flex-col gap-6">
+      <div className="bg-white rounded-xl border border-frogtown-200 shadow-sm p-5 sm:p-6">
         <SectionTitle>About you</SectionTitle>
         <div className="flex flex-col gap-4">
           <div>
@@ -114,7 +129,7 @@ export default function OfferForm() {
               type="text"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
-              className="w-full border border-frogtown-200 rounded-lg px-3 py-2 text-sm mt-1 text-frogtown-900 placeholder:text-muted-green/60"
+              className={inputClasses}
             />
             <p className="text-xs text-muted-green mt-1">Stored privately — only admins see this</p>
             {errors.fullName && <p className="text-xs text-red-600 mt-1">{errors.fullName}</p>}
@@ -127,7 +142,7 @@ export default function OfferForm() {
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
               placeholder="e.g. Maria V."
-              className="w-full border border-frogtown-200 rounded-lg px-3 py-2 text-sm mt-1 text-frogtown-900 placeholder:text-muted-green/60"
+              className={inputClasses}
             />
             <p className="text-xs text-muted-green mt-1">First name and last initial recommended</p>
             {errors.displayName && <p className="text-xs text-red-600 mt-1">{errors.displayName}</p>}
@@ -139,7 +154,7 @@ export default function OfferForm() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full border border-frogtown-200 rounded-lg px-3 py-2 text-sm mt-1 text-frogtown-900 placeholder:text-muted-green/60"
+              className={inputClasses}
             />
             <p className="text-xs text-muted-green mt-1">Private — used only to notify you when approved</p>
             {errors.email && <p className="text-xs text-red-600 mt-1">{errors.email}</p>}
@@ -164,7 +179,7 @@ export default function OfferForm() {
         </div>
       </div>
 
-      <div>
+      <div className="bg-white rounded-xl border border-frogtown-200 shadow-sm p-5 sm:p-6">
         <SectionTitle>Your location</SectionTitle>
         <div className="flex flex-col gap-4">
           <div>
@@ -173,7 +188,7 @@ export default function OfferForm() {
               <button
                 type="button"
                 onClick={() => setShowMap(!showMap)}
-                className="text-xs text-frogtown-600 font-semibold"
+                className="text-xs text-frogtown-600 font-semibold hover:text-frogtown-800 transition-colors"
               >
                 {showMap ? 'Hide map' : 'View map'}
               </button>
@@ -188,10 +203,10 @@ export default function OfferForm() {
                     type="button"
                     key={code}
                     onClick={() => setQuadrant(selected ? null : code)}
-                    className={`rounded-lg p-3 text-center ${
+                    className={`rounded-lg p-3 text-center transition-colors ${
                       selected
                         ? 'bg-frogtown-800 text-white'
-                        : 'bg-frogtown-50 border border-frogtown-200 text-frogtown-800'
+                        : 'bg-frogtown-50 border border-frogtown-200 text-frogtown-800 hover:border-frogtown-400'
                     }`}
                   >
                     <div className="font-bold">{code}</div>
@@ -205,12 +220,9 @@ export default function OfferForm() {
 
           <div>
             <label className="text-sm font-semibold text-frogtown-900">Cross streets</label>
-            <input
-              type="text"
-              value={crossStreets}
-              onChange={(e) => setCrossStreets(e.target.value)}
-              className="w-full border border-frogtown-200 rounded-lg px-3 py-2 text-sm mt-1 text-frogtown-900 placeholder:text-muted-green/60"
-            />
+            <div className="mt-1">
+              <CrossStreetSelect value={crossStreets} onChange={setCrossStreets} />
+            </div>
             <p className="text-xs text-muted-green mt-1">
               Helps neighbors find you without sharing your exact address
             </p>
@@ -218,7 +230,7 @@ export default function OfferForm() {
         </div>
       </div>
 
-      <div>
+      <div className="bg-white rounded-xl border border-frogtown-200 shadow-sm p-5 sm:p-6">
         <SectionTitle>Your skills</SectionTitle>
         <div className="flex flex-col gap-4">
           <div>
@@ -238,12 +250,24 @@ export default function OfferForm() {
           </div>
 
           <div>
+            <label className="text-sm font-semibold text-frogtown-900">Specific skills (optional)</label>
+            <p className="text-xs text-muted-green mt-0.5 mb-1">
+              Pick the specific things you can help with within your selected categories.
+            </p>
+            <SkillsPicklist
+              selectedCategories={skillCategories}
+              value={skills}
+              onChange={setSkills}
+            />
+          </div>
+
+          <div>
             <label className="text-sm font-semibold text-frogtown-900">Bio</label>
             <textarea
               value={bio}
               onChange={(e) => setBio(e.target.value.slice(0, BIO_MAX))}
               maxLength={BIO_MAX}
-              className="w-full border border-frogtown-200 rounded-lg px-3 py-2 text-sm mt-1 text-frogtown-900 placeholder:text-muted-green/60"
+              className={`${inputClasses} resize-none`}
               rows={4}
             />
             <p className={`text-xs mt-1 ${bioRemaining < 20 ? 'text-red-600' : 'text-muted-green'}`}>
@@ -253,7 +277,7 @@ export default function OfferForm() {
         </div>
       </div>
 
-      <div>
+      <div className="bg-white rounded-xl border border-frogtown-200 shadow-sm p-5 sm:p-6">
         <SectionTitle>Consent</SectionTitle>
         <div className="flex flex-col gap-3">
           <label className="flex items-start gap-2 text-sm text-frogtown-900">
@@ -288,7 +312,7 @@ export default function OfferForm() {
       <button
         type="submit"
         disabled={submitting}
-        className="bg-frogtown-800 text-white w-full py-3 font-bold rounded-lg disabled:opacity-60"
+        className="bg-frogtown-800 text-white w-full py-3 font-bold rounded-lg shadow-sm transition-all hover:bg-frogtown-700 active:scale-[0.99] disabled:opacity-60 disabled:hover:bg-frogtown-800 disabled:active:scale-100"
       >
         {submitting ? 'Submitting...' : 'Submit for review'}
       </button>

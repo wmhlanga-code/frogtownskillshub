@@ -85,9 +85,25 @@ export type User = {
   created_at: string
 }
 
+export type AboutTeamMember = {
+  name: string
+  role: string
+}
+
+export type SiteSettings = {
+  id: number
+  hero_heading?: string
+  hero_subheading?: string
+  contact_email?: string
+  about_team: AboutTeamMember[]
+  updated_at?: string
+  updated_by?: string
+}
+
 export type Report = {
   id: string
   thread_id: string
+  reported_by_role: 'seeker' | 'offerer'
   reason?: string
   resolved: boolean
   created_at: string

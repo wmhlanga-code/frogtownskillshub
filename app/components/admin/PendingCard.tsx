@@ -49,7 +49,7 @@ export default function PendingCard({ submission }: { submission: Submission }) 
 
   if (status === 'approved' || status === 'rejected') {
     return (
-      <div className="bg-white border border-frogtown-200 rounded-lg p-4 text-sm text-muted-green">
+      <div className="bg-white border border-frogtown-200 rounded-xl p-4 text-sm text-muted-green">
         {status === 'approved' ? 'Approved' : 'Rejected'} — {submission.full_name}
       </div>
     )
@@ -57,7 +57,7 @@ export default function PendingCard({ submission }: { submission: Submission }) 
 
   return (
     <div
-      className={`bg-white border border-frogtown-200 rounded-lg p-4 ${
+      className={`bg-white border border-frogtown-200 rounded-xl shadow-sm p-4 transition-shadow hover:shadow-md ${
         isRecent ? 'border-l-4 border-l-frogtown-700' : ''
       }`}
     >
@@ -87,19 +87,19 @@ export default function PendingCard({ submission }: { submission: Submission }) 
         <button
           onClick={handleApprove}
           disabled={busy}
-          className="bg-frogtown-800 text-white text-xs font-semibold px-3 py-1.5 rounded-md disabled:opacity-60"
+          className="bg-frogtown-800 text-white text-xs font-semibold px-3 py-1.5 rounded-md transition-colors hover:bg-frogtown-700 disabled:opacity-60 disabled:hover:bg-frogtown-800"
         >
           Approve
         </button>
         <Link
           href={`/admin/pending/${submission.id}/edit`}
-          className="bg-frogtown-50 text-frogtown-800 border border-frogtown-400 text-xs font-semibold px-3 py-1.5 rounded-md"
+          className="bg-frogtown-50 text-frogtown-800 border border-frogtown-400 text-xs font-semibold px-3 py-1.5 rounded-md transition-colors hover:bg-frogtown-100"
         >
           Edit then approve
         </Link>
         <button
           onClick={() => setRejecting(!rejecting)}
-          className="bg-white text-black border border-frogtown-200 text-xs font-semibold px-3 py-1.5 rounded-md hover:border-black"
+          className="bg-white text-black border border-frogtown-200 text-xs font-semibold px-3 py-1.5 rounded-md transition-colors hover:border-black"
         >
           Reject
         </button>
@@ -115,19 +115,19 @@ export default function PendingCard({ submission }: { submission: Submission }) 
             onChange={(e) => setNotes(e.target.value)}
             placeholder="Optional notes"
             rows={2}
-            className="w-full border border-frogtown-200 rounded-lg px-3 py-2 text-sm text-frogtown-900 mb-2"
+            className="w-full border border-frogtown-200 rounded-lg px-3 py-2 text-sm text-frogtown-900 mb-2 transition-colors focus:outline-none focus:border-frogtown-600 focus:ring-2 focus:ring-frogtown-100"
           />
           <div className="flex gap-2">
             <button
               onClick={handleReject}
               disabled={busy}
-              className="bg-black text-white text-xs font-semibold px-3 py-1.5 rounded-md disabled:opacity-60"
+              className="bg-black text-white text-xs font-semibold px-3 py-1.5 rounded-md transition-colors hover:bg-frogtown-900 disabled:opacity-60 disabled:hover:bg-black"
             >
               Confirm reject
             </button>
             <button
               onClick={() => setRejecting(false)}
-              className="bg-white text-frogtown-900 border border-frogtown-200 text-xs font-semibold px-3 py-1.5 rounded-md"
+              className="bg-white text-frogtown-900 border border-frogtown-200 text-xs font-semibold px-3 py-1.5 rounded-md transition-colors hover:bg-frogtown-50"
             >
               Cancel
             </button>

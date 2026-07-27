@@ -31,14 +31,14 @@ export default function ReportedCard({ report }: { report: Report }) {
 
   if (resolved) {
     return (
-      <div className="bg-white border border-frogtown-200 rounded-lg p-4 text-sm text-muted-green">
+      <div className="bg-white border border-frogtown-200 rounded-xl p-4 text-sm text-muted-green">
         Resolved
       </div>
     )
   }
 
   return (
-    <div className="bg-white border border-frogtown-200 rounded-lg p-4">
+    <div className="bg-white border border-frogtown-200 rounded-xl shadow-sm p-4 transition-shadow hover:shadow-md">
       <p className="text-xs text-muted-green">Reported {timeAgo(report.created_at)}</p>
       {report.reason && <p className="text-sm text-frogtown-900 mt-2">{report.reason}</p>}
 
@@ -46,13 +46,13 @@ export default function ReportedCard({ report }: { report: Report }) {
         <button
           onClick={handleResolve}
           disabled={busy}
-          className="bg-frogtown-800 text-white text-xs font-semibold px-3 py-1.5 rounded-md disabled:opacity-60"
+          className="bg-frogtown-800 text-white text-xs font-semibold px-3 py-1.5 rounded-md transition-colors hover:bg-frogtown-700 disabled:opacity-60 disabled:hover:bg-frogtown-800"
         >
           Mark resolved
         </button>
         <Link
           href={`/admin/reported/${report.thread_id}`}
-          className="bg-white text-frogtown-800 border border-frogtown-200 text-xs font-semibold px-3 py-1.5 rounded-md"
+          className="bg-white text-frogtown-800 border border-frogtown-200 text-xs font-semibold px-3 py-1.5 rounded-md transition-colors hover:bg-frogtown-50"
         >
           View thread
         </Link>
