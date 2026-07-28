@@ -20,9 +20,13 @@ export async function POST(request: Request) {
     return Response.json({ error: 'Forbidden' }, { status: 403 })
   }
 
+  // Upsert, not insert: SignupForm fires this right after signUp() without
+  // checking the result, so a retry (or a second tab) must not 409 on an
+  // already-created row - that silently-ignored failure is what left some
+  // accounts with an Auth user but no matching `users` row.
   const { data, error } = await service
     .from('users')
-    .insert({ id, name, email })
+    .upsert({ id, name, email }, { onConflict: 'id' })
     .select('id')
     .single()
 

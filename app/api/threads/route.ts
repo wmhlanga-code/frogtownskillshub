@@ -16,6 +16,18 @@ export async function POST(request: Request) {
 
   const service = createServiceRoleClient()
 
+  // Some existing accounts have an Auth user but no matching `users` row
+  // (the row-creation call in SignupForm.tsx is fire-and-forget), which
+  // makes this insert fail on the seeker_id foreign key below. Self-heal
+  // by creating it here if missing, without touching it if it already
+  // exists (ignoreDuplicates keeps whatever real name signup set).
+  await service
+    .from('users')
+    .upsert(
+      { id: authUser.id, email: authUser.email, name: authUser.email.split('@')[0] },
+      { onConflict: 'id', ignoreDuplicates: true }
+    )
+
   const { data: existing } = await service
     .from('message_threads')
     .select('id')
