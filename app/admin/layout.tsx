@@ -46,16 +46,20 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         >
           <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-frogtown-400/30 to-frogtown-400/10 text-frogtown-400 flex-shrink-0 shadow-sm transition-transform duration-150 group-hover:scale-105">
             <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4">
+              <circle cx="8" cy="8" r="2.4" stroke="currentColor" strokeWidth="1.6" />
+              <circle cx="16" cy="8" r="2.4" stroke="currentColor" strokeWidth="1.6" />
+              <circle cx="8" cy="8" r="0.6" fill="currentColor" />
+              <circle cx="16" cy="8" r="0.6" fill="currentColor" />
               <path
-                d="M12 3c-3 2-5 5-5 8.5a5 5 0 0 0 10 0C17 8 15 5 12 3Z"
+                d="M4 13.5C4 11.2 7 9.7 12 9.7C17 9.7 20 11.2 20 13.5C20 17.8 16.6 21 12 21C7.4 21 4 17.8 4 13.5Z"
                 stroke="currentColor"
-                strokeWidth="1.75"
+                strokeWidth="1.6"
                 strokeLinejoin="round"
               />
               <path
-                d="M12 12v6M9 21c0-1.5 1-3 3-3s3 1.5 3 3"
+                d="M8.5 16C9.7 17.2 14.3 17.2 15.5 16"
                 stroke="currentColor"
-                strokeWidth="1.75"
+                strokeWidth="1.4"
                 strokeLinecap="round"
               />
             </svg>

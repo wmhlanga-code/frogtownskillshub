@@ -11,6 +11,14 @@ import HeroBanner from './HeroBanner'
 
 const CATEGORIES = ['Practical', 'Knowledge', 'Care', 'Emergency', 'Social']
 
+function initials(name: string) {
+  const parts = name.trim().split(/\s+/)
+  return parts
+    .slice(0, 2)
+    .map((p) => p[0]?.toUpperCase())
+    .join('')
+}
+
 export default function DirectoryClient({
   offerers,
   newsPosts,
@@ -200,45 +208,77 @@ export default function DirectoryClient({
             {filtered.map((offerer) => (
               <div
                 key={offerer.id}
-                className="bg-white rounded-lg border border-frogtown-200 p-4 hover:border-frogtown-600 hover:shadow-sm"
+                className="bg-white rounded-xl border border-frogtown-200 shadow-sm p-4 transition-all hover:shadow-md hover:border-frogtown-300"
               >
-                <div className="flex items-center justify-between">
-                  <span className="font-bold text-base">{offerer.display_name}</span>
-                  <span className="bg-frogtown-800 text-white text-xs font-extrabold px-2 py-0.5 rounded">
-                    {offerer.quadrant}
-                  </span>
+                <div className="flex items-start gap-3">
+                  <div className="h-11 w-11 rounded-full bg-gradient-to-br from-frogtown-600 to-frogtown-800 text-white font-bold text-sm flex items-center justify-center flex-shrink-0 shadow-sm">
+                    {initials(offerer.display_name)}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-bold text-base text-frogtown-900 truncate">
+                        {offerer.display_name}
+                      </span>
+                      <span className="bg-frogtown-800 text-white text-xs font-extrabold px-2.5 py-0.5 rounded-full flex-shrink-0">
+                        {offerer.quadrant}
+                      </span>
+                    </div>
+                    {offerer.bio && (
+                      <p className="text-sm text-muted-green mt-0.5 line-clamp-2">{offerer.bio}</p>
+                    )}
+                  </div>
                 </div>
-                <div className="flex flex-wrap gap-1 mt-2">
+
+                <div className="flex flex-wrap gap-1.5 mt-3">
                   {offerer.skill_categories.map((tag) => (
                     <span
                       key={tag}
-                      className="bg-frogtown-50 border border-frogtown-200 text-frogtown-700 text-xs rounded-full px-2 py-0.5"
+                      className="bg-frogtown-50 border border-frogtown-200 text-frogtown-700 text-xs font-medium rounded-full px-2.5 py-1"
                     >
                       {tag}
                     </span>
                   ))}
                 </div>
                 {offerer.skills && offerer.skills.length > 0 && (
-                  <div className="flex flex-wrap gap-1 mt-1.5">
+                  <div className="flex flex-wrap gap-x-2 gap-y-1 mt-2">
                     {offerer.skills.map((skill) => (
-                      <span key={skill} className="text-xs text-frogtown-700">
+                      <span key={skill} className="text-xs text-frogtown-600 font-medium">
                         #{skill}
                       </span>
                     ))}
                   </div>
                 )}
-                <div className="text-xs text-muted-green mt-2 flex flex-col gap-0.5">
-                  <span>Languages: {offerer.languages.join(', ')}</span>
-                  {offerer.cross_streets && <span>Near {offerer.cross_streets}</span>}
+
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-muted-green mt-3 pt-3 border-t border-frogtown-100">
+                  <span>{offerer.languages.join(', ')}</span>
+                  {offerer.cross_streets && (
+                    <span className="flex items-center gap-1">
+                      <span className="text-frogtown-300">·</span>
+                      Near {offerer.cross_streets}
+                    </span>
+                  )}
                 </div>
+
                 <button
                   onClick={() => handleMessage(offerer.id)}
                   disabled={messagingId === offerer.id}
-                  className="block text-center w-full bg-black text-white mt-3 py-2 rounded disabled:opacity-60"
+                  className="flex items-center justify-center gap-2 w-full bg-frogtown-800 text-white mt-3 py-2.5 rounded-lg font-semibold text-sm transition-all hover:bg-frogtown-700 active:scale-[0.99] disabled:opacity-60 disabled:hover:bg-frogtown-800 disabled:active:scale-100"
                 >
-                  {messagingId === offerer.id
-                    ? 'Starting...'
-                    : `Message ${offerer.display_name.split(' ')[0]}`}
+                  {messagingId === offerer.id ? (
+                    'Starting...'
+                  ) : (
+                    <>
+                      <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4 flex-shrink-0">
+                        <path
+                          d="M12 4C7.03 4 3 7.36 3 11.5c0 2.3 1.26 4.36 3.25 5.73-.1.98-.42 2.16-1.19 3.27a.4.4 0 0 0 .43.62c1.6-.4 3.06-1.13 4.1-1.76.75.16 1.55.24 2.41.24 4.97 0 9-3.36 9-7.5S16.97 4 12 4Z"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                      Message {offerer.display_name.split(' ')[0]}
+                    </>
+                  )}
                 </button>
               </div>
             ))}
