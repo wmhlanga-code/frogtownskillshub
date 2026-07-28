@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import Nav from './components/Nav'
 import DirectoryClient from './components/DirectoryClient'
-import HeroBanner from './components/HeroBanner'
 import AboutSection from './components/AboutSection'
 import { createClient } from '@/lib/supabase/server'
 import type { NewsPost, SiteSettings, SkillOfferer } from '@/lib/types'
@@ -37,14 +36,12 @@ export default async function HomePage() {
     <div className="min-h-screen bg-off-white">
       <Nav />
 
-      <HeroBanner>
-        <div className="max-w-2xl mx-auto text-white">
-          <h1 className="text-2xl sm:text-4xl font-bold drop-shadow-sm">{heroHeading}</h1>
-          <p className="text-frogtown-200 mt-3 text-base sm:text-lg">{heroSubheading}</p>
-        </div>
-      </HeroBanner>
-
-      <DirectoryClient offerers={offerers} newsPosts={newsPosts} />
+      <DirectoryClient
+        offerers={offerers}
+        newsPosts={newsPosts}
+        heroHeading={heroHeading}
+        heroSubheading={heroSubheading}
+      />
 
       <AboutSection team={aboutTeam} contactEmail={contactEmail} offererCount={offerers.length} />
 

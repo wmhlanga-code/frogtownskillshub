@@ -1,11 +1,17 @@
 import Image from 'next/image'
 
-// The gap reserved at the bottom (HERO_GAP_CLASS) must match the negative
-// margin the overlapping search card pulls up by (see DirectoryClient), so
-// the card always lands fully on the photo no matter how much hero text
-// an admin enters above it — the reserved gap is a fixed block, independent
-// of the content block's height.
-export default function HeroBanner({ children }: { children: React.ReactNode }) {
+// The photo, heading, and the overlapping search card are all one section
+// here by design — they used to be split across two components coordinated
+// by matching negative-margin/reserved-gap pixel values, which drifted out
+// of sync easily. Keeping them together means the card is always laid out
+// in normal flow on top of the photo, with no magic numbers to maintain.
+export default function HeroBanner({
+  children,
+  overlap,
+}: {
+  children: React.ReactNode
+  overlap?: React.ReactNode
+}) {
   return (
     <section className="relative overflow-hidden">
       <Image
@@ -23,7 +29,7 @@ export default function HeroBanner({ children }: { children: React.ReactNode }) 
         <div className="w-full">{children}</div>
       </div>
 
-      <div className="relative z-10 h-60 sm:h-56" aria-hidden="true" />
+      {overlap && <div className="relative z-10 px-4 pb-8 sm:pb-10">{overlap}</div>}
     </section>
   )
 }

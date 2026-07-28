@@ -7,15 +7,20 @@ import type { NewsPost, Quadrant, SkillOfferer } from '@/lib/types'
 import { QUADRANT_GRID, QUADRANT_COMPASS } from '@/lib/quadrants'
 import NeighborhoodMap from './NeighborhoodMap'
 import NewsStrip from './NewsStrip'
+import HeroBanner from './HeroBanner'
 
 const CATEGORIES = ['Practical', 'Knowledge', 'Care', 'Emergency', 'Social']
 
 export default function DirectoryClient({
   offerers,
   newsPosts,
+  heroHeading,
+  heroSubheading,
 }: {
   offerers: SkillOfferer[]
   newsPosts: NewsPost[]
+  heroHeading: string
+  heroSubheading: string
 }) {
   const router = useRouter()
   const [search, setSearch] = useState('')
@@ -73,59 +78,65 @@ export default function DirectoryClient({
     })
   }, [offerers, search, category, quadrant])
 
+  const searchCard = (
+    <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-2xl border border-frogtown-100 p-5 sm:p-6">
+      <p className="text-xs font-extrabold uppercase tracking-widest text-frogtown-600 mb-2">
+        Find help near you
+      </p>
+      <div className="relative">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-green"
+        >
+          <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="1.8" />
+          <path d="m20 20-3.2-3.2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+        </svg>
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search by name, skill, or language"
+          className="w-full border border-frogtown-200 rounded-lg pl-9 pr-3 py-2.5 text-sm text-frogtown-900 placeholder:text-muted-green/60 focus:outline-none focus:border-frogtown-600 focus:ring-2 focus:ring-frogtown-100"
+        />
+      </div>
+
+      <div className="flex flex-wrap gap-2 mt-3.5">
+        <button
+          onClick={() => setCategory(null)}
+          className={`text-xs px-3 py-1.5 rounded-full ${
+            category === null
+              ? 'bg-frogtown-800 text-white'
+              : 'bg-white border border-frogtown-200 text-frogtown-700'
+          }`}
+        >
+          All
+        </button>
+        {CATEGORIES.map((c) => (
+          <button
+            key={c}
+            onClick={() => setCategory(category === c ? null : c)}
+            className={`text-xs px-3 py-1.5 rounded-full ${
+              category === c
+                ? 'bg-frogtown-800 text-white'
+                : 'bg-white border border-frogtown-200 text-frogtown-700'
+            }`}
+          >
+            {c}
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+
   return (
     <div>
-      {/* -mt must equal HeroBanner's reserved bottom gap exactly — see HeroBanner.tsx */}
-      <div className="relative z-20 -mt-60 sm:-mt-56 px-4">
-        <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-2xl border border-frogtown-100 p-5 sm:p-6">
-          <p className="text-xs font-extrabold uppercase tracking-widest text-frogtown-600 mb-2">
-            Find help near you
-          </p>
-          <div className="relative">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-green"
-            >
-              <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="1.8" />
-              <path d="m20 20-3.2-3.2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-            </svg>
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search by name, skill, or language"
-              className="w-full border border-frogtown-200 rounded-lg pl-9 pr-3 py-2.5 text-sm text-frogtown-900 placeholder:text-muted-green/60 focus:outline-none focus:border-frogtown-600 focus:ring-2 focus:ring-frogtown-100"
-            />
-          </div>
-
-          <div className="flex flex-wrap gap-2 mt-3.5">
-            <button
-              onClick={() => setCategory(null)}
-              className={`text-xs px-3 py-1.5 rounded-full ${
-                category === null
-                  ? 'bg-frogtown-800 text-white'
-                  : 'bg-white border border-frogtown-200 text-frogtown-700'
-              }`}
-            >
-              All
-            </button>
-            {CATEGORIES.map((c) => (
-              <button
-                key={c}
-                onClick={() => setCategory(category === c ? null : c)}
-                className={`text-xs px-3 py-1.5 rounded-full ${
-                  category === c
-                    ? 'bg-frogtown-800 text-white'
-                    : 'bg-white border border-frogtown-200 text-frogtown-700'
-                }`}
-              >
-                {c}
-              </button>
-            ))}
-          </div>
+      <HeroBanner overlap={searchCard}>
+        <div className="max-w-2xl mx-auto text-white">
+          <h1 className="text-2xl sm:text-4xl font-bold drop-shadow-sm">{heroHeading}</h1>
+          <p className="text-frogtown-200 mt-3 text-base sm:text-lg">{heroSubheading}</p>
         </div>
-      </div>
+      </HeroBanner>
 
       <div className="max-w-2xl mx-auto pt-4">
         <NewsStrip posts={newsPosts} />
