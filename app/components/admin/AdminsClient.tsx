@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import type { Admin } from '@/lib/types'
 
@@ -15,6 +15,12 @@ export default function AdminsClient({
 }) {
   const router = useRouter()
   const [admins, setAdmins] = useState(initialAdmins)
+
+  // Re-sync when router.refresh() brings in fresh server data - otherwise
+  // this component's local copy stays stale until a full reload remounts it.
+  useEffect(() => {
+    setAdmins(initialAdmins)
+  }, [initialAdmins])
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [role, setRole] = useState<'admin' | 'super_admin'>('admin')

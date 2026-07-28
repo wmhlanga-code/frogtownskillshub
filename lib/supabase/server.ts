@@ -16,6 +16,10 @@ export function createClient() {
           } catch {}
         },
       },
+      // Without this, Next's patched `fetch` can serve these REST calls out
+      // of its server-side Data Cache instead of hitting Supabase, showing
+      // stale/deleted rows until the cache entry happens to expire.
+      global: { fetch: (url, options) => fetch(url, { ...options, cache: 'no-store' }) },
     }
   )
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import type { SkillOfferer } from '@/lib/types'
@@ -10,6 +10,14 @@ export default function ListingsClient({ offerers }: { offerers: SkillOfferer[] 
   const [search, setSearch] = useState('')
   const [items, setItems] = useState(offerers)
   const [busyId, setBusyId] = useState<string | null>(null)
+
+  // router.refresh() re-renders the server component with fresh `offerers`,
+  // but that alone doesn't update this already-mounted component's local
+  // copy - without this, deleted/changed rows kept showing until a full
+  // page reload remounted the component.
+  useEffect(() => {
+    setItems(offerers)
+  }, [offerers])
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase()

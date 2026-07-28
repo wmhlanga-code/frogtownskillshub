@@ -5,6 +5,10 @@ import AdminNavClient from '../components/admin/AdminNavClient'
 import AdminMobileNav from '../components/admin/AdminMobileNav'
 import SignOutButton from '../components/admin/SignOutButton'
 
+// Admin data changes via mutations from other admins/requests, so nothing
+// under /admin should be eligible for Next's route/data caching.
+export const dynamic = 'force-dynamic'
+
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = headers().get('x-pathname') ?? ''
 

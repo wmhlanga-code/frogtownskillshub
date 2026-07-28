@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import type { NewsPost, NewsTag } from '@/lib/types'
 
@@ -13,6 +13,12 @@ function formatDate(iso: string) {
 export default function NewsManager({ posts: initialPosts }: { posts: NewsPost[] }) {
   const router = useRouter()
   const [posts, setPosts] = useState(initialPosts)
+
+  // Re-sync when router.refresh() brings in fresh server data - otherwise
+  // this component's local copy stays stale until a full reload remounts it.
+  useEffect(() => {
+    setPosts(initialPosts)
+  }, [initialPosts])
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
   const [tag, setTag] = useState<NewsTag>('Notice')

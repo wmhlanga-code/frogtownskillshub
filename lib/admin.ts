@@ -6,7 +6,13 @@ import type { Admin } from '@/lib/types'
 export function createServiceRoleClient() {
   return createServiceClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    {
+      // Without this, Next's patched `fetch` can serve these REST calls out
+      // of its server-side Data Cache, so admin pages kept showing
+      // pre-mutation data (e.g. deleted rows) after router.refresh().
+      global: { fetch: (url, options) => fetch(url, { ...options, cache: 'no-store' }) },
+    }
   )
 }
 
