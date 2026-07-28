@@ -22,6 +22,7 @@ export default function OfferForm() {
   const [fullName, setFullName] = useState('')
   const [displayName, setDisplayName] = useState('')
   const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
   const [languages, setLanguages] = useState<string[]>([])
   const [quadrant, setQuadrant] = useState<Quadrant | null>(null)
   const [crossStreets, setCrossStreets] = useState('')
@@ -69,6 +70,7 @@ export default function OfferForm() {
           full_name: fullName,
           display_name: displayName,
           email,
+          phone: phone || undefined,
           languages,
           quadrant,
           cross_streets: crossStreets || undefined,
@@ -158,6 +160,17 @@ export default function OfferForm() {
             />
             <p className="text-xs text-muted-green mt-1">Private — used only to notify you when approved</p>
             {errors.email && <p className="text-xs text-red-600 mt-1">{errors.email}</p>}
+          </div>
+
+          <div>
+            <label className="text-sm font-semibold text-frogtown-900">Phone number (optional)</label>
+            <input
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              className={inputClasses}
+            />
+            <p className="text-xs text-muted-green mt-1">Private — never shown publicly</p>
           </div>
 
           <div>

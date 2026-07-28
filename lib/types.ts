@@ -6,6 +6,7 @@ export type SkillOfferer = {
   id: string
   display_name: string
   email?: string
+  phone?: string
   quadrant: Quadrant
   cross_streets?: string
   skill_categories: string[]
