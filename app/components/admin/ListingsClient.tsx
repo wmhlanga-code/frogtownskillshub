@@ -38,6 +38,30 @@ export default function ListingsClient({ offerers }: { offerers: SkillOfferer[] 
     }
   }
 
+  async function handleDelete(id: string, name: string) {
+    if (
+      !window.confirm(
+        `Permanently delete "${name}"? This also deletes their message threads and reports. This cannot be undone.`
+      )
+    ) {
+      return
+    }
+
+    setBusyId(id)
+    try {
+      const res = await fetch(`/api/admin/listings/${id}`, { method: 'DELETE' })
+      if (res.ok) {
+        setItems((prev) => prev.filter((item) => item.id !== id))
+        router.refresh()
+      } else {
+        const data = await res.json().catch(() => ({}))
+        window.alert(data.error || 'Failed to delete listing')
+      }
+    } finally {
+      setBusyId(null)
+    }
+  }
+
   return (
     <div>
       <input
@@ -100,6 +124,13 @@ export default function ListingsClient({ offerers }: { offerers: SkillOfferer[] 
                       className="text-xs text-black font-semibold transition-colors hover:text-frogtown-700 disabled:opacity-60"
                     >
                       {offerer.active ? 'Deactivate' : 'Reactivate'}
+                    </button>
+                    <button
+                      onClick={() => handleDelete(offerer.id, offerer.display_name)}
+                      disabled={busyId === offerer.id}
+                      className="text-xs text-red-600 font-semibold transition-colors hover:text-red-800 disabled:opacity-60"
+                    >
+                      Delete
                     </button>
                   </div>
                 </td>
