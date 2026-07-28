@@ -75,7 +75,7 @@ export default function AboutSection({
   return (
     <section id="about" className="scroll-mt-16">
       <div className="bg-white">
-        <div className="max-w-2xl mx-auto px-5 pt-14 pb-10">
+        <div className="max-w-2xl mx-auto px-4 pt-14 pb-10">
           <p className="text-xs font-extrabold uppercase tracking-widest text-frogtown-600 mb-2">
             About the project
           </p>
@@ -103,7 +103,7 @@ export default function AboutSection({
       </div>
 
       <div className="bg-frogtown-50 border-y border-frogtown-100">
-        <div className="max-w-2xl mx-auto px-5 py-12">
+        <div className="max-w-2xl mx-auto px-4 py-12">
           <h3 className="text-lg font-bold text-frogtown-900 mb-5">How it works</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {PRINCIPLES.map((p) => (
@@ -127,7 +127,7 @@ export default function AboutSection({
       </div>
 
       <div className="bg-white">
-        <div className="max-w-2xl mx-auto px-5 py-12">
+        <div className="max-w-2xl mx-auto px-4 py-12">
           <h3 className="text-lg font-bold text-frogtown-900 mb-3">The neighborhood map</h3>
           <p className="text-sm text-muted-green mb-4 leading-relaxed">
             Frogtown is divided into thirteen quadrants, grouped by color and numbered by position.
@@ -161,7 +161,7 @@ export default function AboutSection({
 
       {team.length > 0 && (
         <div className="bg-frogtown-50 border-y border-frogtown-100">
-          <div className="max-w-2xl mx-auto px-5 py-12">
+          <div className="max-w-2xl mx-auto px-4 py-12">
             <h3 className="text-lg font-bold text-frogtown-900 mb-5">Who runs this</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {team.map((member, i) => (
@@ -184,7 +184,7 @@ export default function AboutSection({
       )}
 
       <div className="bg-frogtown-900">
-        <div className="max-w-2xl mx-auto px-5 py-14">
+        <div className="max-w-2xl mx-auto px-4 py-14">
           <h3 className="text-xl sm:text-2xl font-bold text-white">Get in touch</h3>
           <p className="text-sm text-frogtown-200 mt-2 max-w-md leading-relaxed">
             Questions about a listing, a safety concern, or want to become a community admin?

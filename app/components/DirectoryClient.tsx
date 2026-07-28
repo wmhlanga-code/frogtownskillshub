@@ -127,7 +127,7 @@ export default function DirectoryClient({
         </div>
       </div>
 
-      <div className="max-w-3xl mx-auto pt-4">
+      <div className="max-w-2xl mx-auto pt-4">
         <NewsStrip posts={newsPosts} />
 
         <div

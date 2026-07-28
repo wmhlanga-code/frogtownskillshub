@@ -38,7 +38,7 @@ export default async function HomePage() {
       <Nav />
 
       <HeroBanner>
-        <div className="max-w-3xl mx-auto text-white">
+        <div className="max-w-2xl mx-auto text-white">
           <h1 className="text-2xl sm:text-4xl font-bold drop-shadow-sm">{heroHeading}</h1>
           <p className="text-frogtown-200 mt-3 text-base sm:text-lg">{heroSubheading}</p>
         </div>
