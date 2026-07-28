@@ -18,6 +18,21 @@ export async function POST(request: Request, { params }: { params: { id: string 
     return Response.json({ error: 'Submission not found' }, { status: 404 })
   }
 
+  // Invite the offerer to set a password so they can log in and read
+  // messages sent to their listing. A 422 here just means an account with
+  // this email already exists (e.g. they signed up separately) - not a
+  // real failure. Any other invite error is logged but doesn't block
+  // approval, since the public directory listing shouldn't hinge on
+  // transactional email delivery.
+  const { origin } = new URL(request.url)
+  const { error: inviteError } = await service.auth.admin.inviteUserByEmail(submission.email, {
+    redirectTo: `${origin}/account/set-password?next=/messages`,
+  })
+
+  if (inviteError && inviteError.status !== 422) {
+    console.error('Failed to send offerer invite email:', inviteError)
+  }
+
   const { error: insertError } = await service.from('skill_offerers').insert({
     submission_id: submission.id,
     display_name: submission.display_name,
