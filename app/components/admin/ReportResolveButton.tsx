@@ -1,8 +1,10 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function ReportResolveButton({ reportId }: { reportId: string }) {
+  const router = useRouter()
   const [resolved, setResolved] = useState(false)
   const [busy, setBusy] = useState(false)
 
@@ -10,7 +12,10 @@ export default function ReportResolveButton({ reportId }: { reportId: string }) 
     setBusy(true)
     try {
       const res = await fetch(`/api/admin/reports/${reportId}/resolve`, { method: 'POST' })
-      if (res.ok) setResolved(true)
+      if (res.ok) {
+        setResolved(true)
+        router.refresh()
+      }
     } finally {
       setBusy(false)
     }

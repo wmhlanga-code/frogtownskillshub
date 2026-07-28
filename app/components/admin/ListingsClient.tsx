@@ -2,9 +2,11 @@
 
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import type { SkillOfferer } from '@/lib/types'
 
 export default function ListingsClient({ offerers }: { offerers: SkillOfferer[] }) {
+  const router = useRouter()
   const [search, setSearch] = useState('')
   const [items, setItems] = useState(offerers)
   const [busyId, setBusyId] = useState<string | null>(null)
@@ -29,6 +31,7 @@ export default function ListingsClient({ offerers }: { offerers: SkillOfferer[] 
         setItems((prev) =>
           prev.map((item) => (item.id === id ? { ...item, active: data.active } : item))
         )
+        router.refresh()
       }
     } finally {
       setBusyId(null)

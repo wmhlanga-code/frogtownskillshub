@@ -27,6 +27,7 @@ export default function AdminLoginPage() {
       }
 
       router.push('/admin')
+      router.refresh()
     } finally {
       setLoading(false)
     }

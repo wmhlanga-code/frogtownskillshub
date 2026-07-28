@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import type { Submission } from '@/lib/types'
 
 function timeAgo(iso: string) {
@@ -16,6 +17,7 @@ function timeAgo(iso: string) {
 }
 
 export default function PendingCard({ submission }: { submission: Submission }) {
+  const router = useRouter()
   const [status, setStatus] = useState<'pending' | 'approved' | 'rejected' | 'removed'>('pending')
   const [rejecting, setRejecting] = useState(false)
   const [notes, setNotes] = useState('')
@@ -27,7 +29,10 @@ export default function PendingCard({ submission }: { submission: Submission }) 
     setBusy(true)
     try {
       const res = await fetch(`/api/admin/submissions/${submission.id}/approve`, { method: 'POST' })
-      if (res.ok) setStatus('approved')
+      if (res.ok) {
+        setStatus('approved')
+        router.refresh()
+      }
     } finally {
       setBusy(false)
     }
@@ -41,7 +46,10 @@ export default function PendingCard({ submission }: { submission: Submission }) 
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ notes: notes || undefined }),
       })
-      if (res.ok) setStatus('rejected')
+      if (res.ok) {
+        setStatus('rejected')
+        router.refresh()
+      }
     } finally {
       setBusy(false)
     }

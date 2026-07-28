@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import type { NewsPost, NewsTag } from '@/lib/types'
 
 const TAGS: NewsTag[] = ['Notice', 'Event', 'Update', 'Pinned']
@@ -10,6 +11,7 @@ function formatDate(iso: string) {
 }
 
 export default function NewsManager({ posts: initialPosts }: { posts: NewsPost[] }) {
+  const router = useRouter()
   const [posts, setPosts] = useState(initialPosts)
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
@@ -71,6 +73,7 @@ export default function NewsManager({ posts: initialPosts }: { posts: NewsPost[]
         )
       )
       setEditingId(null)
+      router.refresh()
     } finally {
       setSavingEdit(false)
     }
@@ -108,6 +111,7 @@ export default function NewsManager({ posts: initialPosts }: { posts: NewsPost[]
       setBody('')
       setTag('Notice')
       setPinned(false)
+      router.refresh()
     } catch {
       setError('Something went wrong. Please try again.')
     } finally {
@@ -125,6 +129,7 @@ export default function NewsManager({ posts: initialPosts }: { posts: NewsPost[]
       setPosts((prev) =>
         prev.map((p) => (p.id === post.id ? { ...p, published: !p.published } : p))
       )
+      router.refresh()
     }
   }
 
@@ -133,6 +138,7 @@ export default function NewsManager({ posts: initialPosts }: { posts: NewsPost[]
     const res = await fetch(`/api/admin/news/${id}`, { method: 'DELETE' })
     if (res.ok) {
       setPosts((prev) => prev.filter((p) => p.id !== id))
+      router.refresh()
     }
   }
 

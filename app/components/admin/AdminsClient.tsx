@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import type { Admin } from '@/lib/types'
 
 export default function AdminsClient({
@@ -12,6 +13,7 @@ export default function AdminsClient({
   currentAdminId: string
   isSuperAdmin: boolean
 }) {
+  const router = useRouter()
   const [admins, setAdmins] = useState(initialAdmins)
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -58,6 +60,7 @@ export default function AdminsClient({
       setName('')
       setEmail('')
       setRole('admin')
+      router.refresh()
     } catch {
       setError('Something went wrong. Please try again.')
     } finally {
@@ -71,6 +74,7 @@ export default function AdminsClient({
       const res = await fetch(`/api/admin/admins/${admin.id}/deactivate`, { method: 'POST' })
       if (res.ok) {
         setAdmins((prev) => prev.map((a) => (a.id === admin.id ? { ...a, active: false } : a)))
+        router.refresh()
       }
     } finally {
       setBusyId(null)

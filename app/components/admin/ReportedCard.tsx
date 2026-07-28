@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import type { Report } from '@/lib/types'
 
 function timeAgo(iso: string) {
@@ -16,6 +17,7 @@ function timeAgo(iso: string) {
 }
 
 export default function ReportedCard({ report }: { report: Report }) {
+  const router = useRouter()
   const [resolved, setResolved] = useState(false)
   const [busy, setBusy] = useState(false)
 
@@ -23,7 +25,10 @@ export default function ReportedCard({ report }: { report: Report }) {
     setBusy(true)
     try {
       const res = await fetch(`/api/admin/reports/${report.id}/resolve`, { method: 'POST' })
-      if (res.ok) setResolved(true)
+      if (res.ok) {
+        setResolved(true)
+        router.refresh()
+      }
     } finally {
       setBusy(false)
     }
