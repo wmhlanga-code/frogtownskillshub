@@ -10,9 +10,11 @@ export default async function HomePage() {
 
   const [offerersResult, newsResult, settingsResult] = await Promise.all([
     supabase
-      .from('skill_offerers')
-      .select('*')
-      .eq('active', true)
+      // public_skill_offerers is a view exposing only public-safe columns
+      // (no email/phone) and only active rows - anon/authenticated no
+      // longer have a SELECT grant on the base skill_offerers table.
+      .from('public_skill_offerers')
+      .select('id, display_name, quadrant, cross_streets, skill_categories, skills, bio, languages, active, created_at')
       .order('created_at', { ascending: false }),
     supabase
       .from('news_posts')

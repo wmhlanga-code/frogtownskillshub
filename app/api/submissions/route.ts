@@ -34,6 +34,13 @@ export async function POST(request: Request) {
     return Response.json({ error: 'Missing required fields' }, { status: 400 })
   }
 
+  // The form caps bio at 200 characters, but that's client-side only -
+  // enforce it here too so the field can't be used to stuff arbitrarily
+  // large payloads into the database.
+  if (typeof bio === 'string' && bio.length > 200) {
+    return Response.json({ error: 'Bio must be 200 characters or fewer' }, { status: 400 })
+  }
+
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!
